@@ -3,3 +3,4 @@ PyPDF2==3.0.1
 streamlit==1.32.0
 streamlit-book==0.7.5
 streamlit-option-menu==0.3.12
+
