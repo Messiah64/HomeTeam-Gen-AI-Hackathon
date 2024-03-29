@@ -20,6 +20,7 @@ def parse_questions_text(text):
     questions = []
     answer_options = []
     correct_answer_index = []
+    reasons = []
 
     for line in lines:
         if line.strip():  # Check if line is not empty
@@ -27,13 +28,15 @@ def parse_questions_text(text):
             question_number = parts[0].strip()
             question = parts[1].strip()
             options = [option.strip() for option in parts[2:6]]  # Extract options
-            correct_index = int(parts[6].strip()) - 1  # Convert to zero-based index
-
+            correct_index = int(parts[-1].strip()) - 1  # Correct answer index is the last element
+            reason = parts[-2].strip()[1:-1]  # Extract reason enclosed in brackets
+            
             questions.append(f"{question_number} | {question}")
             answer_options.append(options)
             correct_answer_index.append(correct_index)
+            reasons.append(reason)
 
-    return questions, answer_options, correct_answer_index
+    return questions, answer_options, correct_answer_index, reasons
 
 @st.cache_resource
 def get_chat_response(user_query):
@@ -49,8 +52,8 @@ def get_chat_response(user_query):
 
     # Create message text with system prompt and user query
     message_text = [
-        {"role": "system", "content": "You are an expert Quiz Maker. Understand this text and generate for 10 questions, 4 possible answers to each question, and the correct answer. I want the Question, Choices, and Answer to be in this format: Question1 | Choice1 | Choice2 | Choice3 | Choice4 | Index of correct answer(example 2 #For Choice 3). Do not give me any other information other than this. STRICTLY follow this template i have specified."},
-        {"role": "user", "content": user_query}
+        {"role": "system", "content": "You are an expert Quiz Maker who makes thoughtful quizes to make sure an examinee truly understands his/her concepts. Understand this text and generate for 10 questions, 4 possible answers to each question, its reason for being correct, and the correct answer's index( 0 to 3 as there are 4 options) . I want the Question, Choices, Reason, Correnc answer index to be in this format: Question1 | Choice1 | Choice2 | Choice3 | Choice4 | (reason) | (example: 2 #For Choice 3). Do not give me any other information other than this. STRICTLY follow this template I have specified. i dont want any filler words. DONT MESS THIS UP VERY IMPORTANT!!"},
+        {"role": "user", "content": "generate questions using full content of my SOP book: " + user_query}
     ]
 
     # Generate completion using AzureOpenAI API
@@ -58,7 +61,7 @@ def get_chat_response(user_query):
         model="GenAI-LLM",  # model = "deployment_name"
         messages=message_text,
         temperature=0.,
-        max_tokens=1000,
+        max_tokens=10000,
         top_p=0.95,
         frequency_penalty=0,
         presence_penalty=0,
@@ -106,17 +109,12 @@ def main():
     
     # Pass the extracted text to the get_chat_response function
         response_message = get_chat_response(pdf_text)
+        questions, answer_options, correct_answer_index, reasons = parse_questions_text(response_message)
+        print(questions, answer_options, correct_answer_index, reasons)
 
-        # Call the function to parse the text
-        questions, answer_options, correct_answer_index = parse_questions_text(response_message)
-
-        # Display the lists
-        print("Questions:", questions)
-        print("Answer Options:", answer_options)
-        print("Correct Answer Indices:", correct_answer_index)
+        # st.write(response_message)
         for i in range(len(questions)):
-            stb.single_choice(questions[i], answer_options[i], correct_answer_index[i])
-                  
+            stb.single_choice(questions[i], answer_options[i], correct_answer_index[i] + 1, reasons[i], reasons[i])          
                   
 
 
