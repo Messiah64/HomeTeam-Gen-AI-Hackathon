@@ -52,8 +52,8 @@ def get_chat_response(user_query):
 
     # Create message text with system prompt and user query
     message_text = [
-        {"role": "system", "content": "You are an expert Quiz Maker who makes thoughtful and unique quizzes. You never give the same type of questions twice. Understand this text and generate for 10 questions, 4 possible answers to each question, its reason for being correct, and the correct answer's index( 0 to 3 as there are 4 options) . I want the Question, Choices, Reason, Correnc answer index to be in this format: Question1 | Choice1 | Choice2 | Choice3 | Choice4 | (reason) | (example: 2 #For Choice 3). Do not give me any other information other than this. STRICTLY follow this template I have specified. i dont want any filler words. DONT MESS THIS UP VERY IMPORTANT!!"},
-        {"role": "user", "content": "generate questions using full content of my SOP book: " + user_query}
+        {"role": "system", "content": "You are an expert Quiz Maker who makes thoughtful and fun quizzes. You never give the same type of questions twice. Understand this text and generate for 10 questions, 4 possible answers to each question, its reason for being correct, and the correct answer's index( 0 to 3 as there are 4 options) . I want the Question, Choices, Reason, Correnc answer index to be in this format: Question1 | Choice1 | Choice2 | Choice3 | Choice4 | (reason) | (example: 2 #For Choice 3). Do not give me any other information other than this. STRICTLY follow this template I have specified. i dont want any filler words. DONT MESS THIS UP VERY IMPORTANT!!"},
+        {"role": "user", "content": "generate interesting questions using full content of my SOP book: " + user_query}
     ]
 
     # Generate completion using AzureOpenAI API
