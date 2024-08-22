@@ -1,9 +1,8 @@
 import streamlit as st
 import streamlit_book as stb
-from openai import AzureOpenAI
+from openai import OpenAI
+import openai
 from PyPDF2 import PdfReader
-
-# Test 1
 
 @st.cache_resource
 def read_pdf(file):
@@ -15,75 +14,79 @@ def read_pdf(file):
     return text
 
 @st.cache_resource
-def parse_questions_text(text):
-    lines = text.split("\n")  # Split text into lines
-    questions = []
-    answer_options = []
-    correct_answer_index = []
-    reasons = []
-
-    for line in lines:
-        if line.strip():  # Check if line is not empty
-            parts = line.split(" | ")  # Split line by delimiter
-            question_number = parts[0].strip()
-            question = parts[1].strip()
-            options = [option.strip() for option in parts[2:6]]  # Extract options
-            correct_index = int(parts[-1].strip()) - 1  # Correct answer index is the last element
-            reason = parts[-2].strip()[1:-1]  # Extract reason enclosed in brackets
-            
-            questions.append(f"{question_number} | {question}")
-            answer_options.append(options)
-            correct_answer_index.append(correct_index)
-            reasons.append(reason)
-
-    return questions, answer_options, correct_answer_index, reasons
-
-@st.cache_resource
 def get_chat_response(user_query):
+    # openai.api_key = st.secrets["OpenAI_Key"]
 
     OpenAI_Key = st.secrets["OpenAI_Key"]
+    client = OpenAI(api_key=OpenAI_Key)
 
-    # Initialize AzureOpenAI client
-    client = AzureOpenAI(
-        azure_endpoint="https://genai-llm.openai.azure.com/",
-        api_key=OpenAI_Key,
-        api_version="2024-02-15-preview"
-    )
-
-    # Create message text with system prompt and user query
     message_text = [
-        {"role": "system", "content": "You are an expert Quiz Maker who makes thoughtful and fun quizzes. You never give the same type of questions twice. Understand this text and generate for 10 questions, 4 possible answers to each question, its reason for being correct, and the correct answer's index( 0 to 3 as there are 4 options) . I want the Question, Choices, Reason, Correnc answer index to be in this format: Question1 | Choice1 | Choice2 | Choice3 | Choice4 | (reason) | (example: 2 #For Choice 3). Do not give me any other information other than this. STRICTLY follow this template I have specified. i dont want any filler words. DONT MESS THIS UP VERY IMPORTANT!!"},
+        {"role": "system", "content": "You are an expert Quiz Maker who makes thoughtful and fun quizzes. You never give the same type of questions twice. Understand this text and generate for 10 questions, 4 possible answers to each question, the correct answer's index( 0 to 3 as there are 4 options), and its reason for being correct or wrong. Each reason for each of the choices, depending its correct or wrong. I want the Question, Choices, Correct Answer Index and Reasons to be in this format: Question1 | Choice1 | Choice2 | Choice3 | Choice4 | (example: 2 #For Choice 3 | (reason for option A being correct/or wrong if not the right answer) | (reason for option B being correct/or wrong if not the right answer) | (reason for option C being correct/or wrong if not the right answer) | (reason for option D being correct/or wrong if not the right answer),   An Example if option C is the right answer: Question1 - What is the colour of healthy grass | Red | Yellow | Blue | Green | 3 | Healthy grass isn't Red colour | Grass is only yellow if its diseased | Its impossible for grass to be blue in colour | Yes! Grass is indeed Green in colour |. Do not give me any other information other than this. STRICTLY follow this template I have specified. i dont want any filler words. DONT MESS THIS UP VERY IMPORTANT!!"},
         {"role": "user", "content": "generate interesting questions using full content of my SOP book: " + user_query}
     ]
 
-    # Generate completion using AzureOpenAI API
     completion = client.chat.completions.create(
-        model="GenAI-LLM",  # model = "deployment_name"
+        model="gpt-4o",
         messages=message_text,
-        temperature=0.,
-        max_tokens=10000,
+        temperature=0.2,
         top_p=0.95,
         frequency_penalty=0,
         presence_penalty=0,
         stop=None
     )
 
-    # Extract the filtered response message
-    filtered_message = ""
-    if completion.choices:
-        for choice in completion.choices:
-            if choice.message and choice.message.role == "assistant":
-                filtered_message = choice.message.content
-                break
+    filtered_message = completion.choices[0].message.content
 
     return filtered_message
 
+@st.cache_resource
+def OpenAI_Filtering_Check(input):
+        
+        OpenAI_Key = st.secrets["OpenAI_Key"]
+        client = OpenAI(api_key=OpenAI_Key)
+
+        message_text = [
+            {"role": "system", "content": "Take this input and Return this in a numbered bulletised format seperated by the \n key in between bullet points"},
+            {"role": "user", "content": input}
+        ]
+
+        completion = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=message_text,
+            temperature=0.2,
+            top_p=0.95,
+            frequency_penalty=0,
+            presence_penalty=0,
+            stop=None
+        )
+
+        filtered_message = completion.choices[0].message.content
+
+        return filtered_message
+
+@st.cache_resource
+def parse_questions_text(text):
+    questions = []
+    answer_options = []
+    correct_answer_index = []
+    reasons = []
+
+    for line in text.split("\n"):
+        if line.strip():
+            parts = line.split(" | ")
+            question = parts[0].strip()
+            options = [option.strip() for option in parts[1:5]]
+            correct_index = int(parts[5].strip()) - 1
+            reason = [option.strip() for option in parts[6:10]]
+
+            questions.append(question)
+            answer_options.append(options)
+            correct_answer_index.append(correct_index)
+            reasons.append(reason)
+
+    return questions, answer_options, correct_answer_index, reasons
 
 def main():
-
-
-    
-
     st.markdown(
         """
         # :red[S.A.R.A] &nbsp;&nbsp;:brain: :calendar: :zap:
@@ -91,32 +94,34 @@ def main():
         ### :blue[Stay up to date with new revised Standard Operating Procedure]
         """
     )
-    st.divider()  #  Draws a horizontal rule
+    st.divider()
 
-    # Set the label text
-    label_text = "Upload the Standard Operating Procedures:"
-    # Increase the size of the label using HTML styling
-    st.markdown(f"<h5 style='color: #fcec04;'>{label_text}</h3>", unsafe_allow_html=True)
-
-    # File uploader
     uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
 
     if uploaded_file is not None:
-        
-    # Start logic here
-    # Read text from uploaded PDF file
+        # Read text from uploaded PDF file
         pdf_text = read_pdf(uploaded_file)
-    
-    # Pass the extracted text to the get_chat_response function
+        # Pass the extracted text to the get_chat_response function
         response_message = get_chat_response(pdf_text)
+        print(response_message)
+
         questions, answer_options, correct_answer_index, reasons = parse_questions_text(response_message)
-        print(questions, answer_options, correct_answer_index, reasons)
 
-        # st.write(response_message)
         for i in range(len(questions)):
-            stb.single_choice(questions[i], answer_options[i], correct_answer_index[i] + 1, reasons[i], reasons[i])          
-                  
+            def check_answer(selected_option):
+                if selected_option == correct_answer_index[i] + 1:
+                    return f"{reasons[i][correct_answer_index[i]]} | {reasons[i][0]} | {reasons[i][1]} | {reasons[i][2]} | {reasons[i][3]}"
+                else:
+                    return f"Option {selected_option}: {reasons[i][selected_option - 1]}"
 
+            stb.single_choice(
+                questions[i],
+                answer_options[i],
+                correct_answer_index[i] + 1,
+                success=OpenAI_Filtering_Check(check_answer(correct_answer_index[i] + 1)),
+                error='''Wrong Answer :) \n Please try again''',
+                button="Check answer"
+            )
 
 if __name__ == "__main__":
     main()
