@@ -90,8 +90,8 @@ def main():
     st.markdown(
         """
         # :red[S.A.R.A] &nbsp;&nbsp;:brain: :calendar: :zap:
-        ### :blue[No more fretting over upcoming Audits or Course Exams]
-        ### :blue[Stay up to date with new revised Standard Operating Procedure]
+        #### :blue[No more fretting over upcoming Audits or Course Exams]
+        #### :blue[Stay up to date with new revised Standard Operating Procedure]
         """
     )
     st.divider()
