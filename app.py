@@ -46,7 +46,7 @@ def OpenAI_Filtering_Check(input):
         client = OpenAI(api_key=OpenAI_Key)
 
         message_text = [
-            {"role": "system", "content": "Take this input and Return this in a numbered bulletised format seperated by the \n key in between bullet points"},
+            {"role": "system", "content": "Take this input and Return this in a numbered bulletised format seperated by the \n key in between bullet points. Make sure no points that are given are the same. all must be unique. Omit if needed."},
             {"role": "user", "content": input}
         ]
 
