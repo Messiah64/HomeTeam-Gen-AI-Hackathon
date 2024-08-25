@@ -4,6 +4,8 @@ from openai import OpenAI
 import openai
 from PyPDF2 import PdfReader
 
+# Made by Khambhati 
+
 @st.cache_resource
 def read_pdf(file):
     pdf_reader = PdfReader(file)
