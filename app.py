@@ -30,7 +30,7 @@ def get_chat_response(user_query):
         model="gpt-4o",
         messages=message_text,
         temperature=0.2,
-        top_p=1,
+        top_p=0.3,
         frequency_penalty=0.2,
         presence_penalty=0,
         stop=None
