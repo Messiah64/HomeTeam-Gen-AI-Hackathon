@@ -55,10 +55,10 @@ def OpenAI_Filtering_Check(input):
         completion = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=message_text,
-            temperature=0.2,
-            top_p=0.6,
-            frequency_penalty=0.5,
-            presence_penalty=0.5,
+            temperature=0.1,
+            top_p=0.9,
+            frequency_penalty=0,
+            presence_penalty=0,
             stop=None
         )
 
