@@ -5,7 +5,6 @@ import openai
 from PyPDF2 import PdfReader
 
 # Made by Khambhati 
-
 @st.cache_resource
 def read_pdf(file):
     pdf_reader = PdfReader(file)
@@ -30,10 +29,10 @@ def get_chat_response(user_query):
     completion = client.chat.completions.create(
         model="gpt-4o",
         messages=message_text,
-        temperature=0.7,
-        top_p=0.4,
-        frequency_penalty=0.5,
-        presence_penalty=0.5,
+        temperature=0.2,
+        top_p=1,
+        frequency_penalty=0.2,
+        presence_penalty=0,
         stop=None
     )
 
@@ -43,7 +42,7 @@ def get_chat_response(user_query):
 
 @st.cache_resource
 def OpenAI_Filtering_Check(input):
-        
+
         OpenAI_Key = st.secrets["OpenAI_Key"]
         client = OpenAI(api_key=OpenAI_Key)
 
@@ -55,8 +54,8 @@ def OpenAI_Filtering_Check(input):
         completion = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=message_text,
-            temperature=0.1,
-            top_p=0.9,
+            temperature=0.2,
+            top_p=0.95,
             frequency_penalty=0,
             presence_penalty=0,
             stop=None
