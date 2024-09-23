@@ -30,10 +30,10 @@ def get_chat_response(user_query):
     completion = client.chat.completions.create(
         model="gpt-4o",
         messages=message_text,
-        temperature=0.2,
-        top_p=0.95,
-        frequency_penalty=0,
-        presence_penalty=0,
+        temperature=0.7,
+        top_p=0.4,
+        frequency_penalty=0.5,
+        presence_penalty=0.5,
         stop=None
     )
 
@@ -56,9 +56,9 @@ def OpenAI_Filtering_Check(input):
             model="gpt-4o-mini",
             messages=message_text,
             temperature=0.2,
-            top_p=0.95,
-            frequency_penalty=0,
-            presence_penalty=0,
+            top_p=0.6,
+            frequency_penalty=0.5,
+            presence_penalty=0.5,
             stop=None
         )
 
