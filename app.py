@@ -1,10 +1,18 @@
+import streamlit_shadcn_ui as ui
 import streamlit as st
 import streamlit_book as stb
 from openai import OpenAI
-import openai
 from PyPDF2 import PdfReader
+import markdown
+from html2docx import html2docx
+from docx import Document
+import io
+import pdfkit  
+import warnings
 
-# Made by Khambhati 
+warnings.filterwarnings("ignore")
+
+
 @st.cache_resource
 def read_pdf(file):
     pdf_reader = PdfReader(file)
@@ -29,8 +37,8 @@ def get_chat_response(user_query):
     completion = client.chat.completions.create(
         model="gpt-4o",
         messages=message_text,
-        temperature=0.2,
-        top_p=0.95,
+        temperature=0.9,
+        top_p=0.5,
         frequency_penalty=0,
         presence_penalty=0,
         stop=None
@@ -87,19 +95,73 @@ def parse_questions_text(text):
 
     return questions, answer_options, correct_answer_index, reasons
 
-def main():
-    st.markdown(
-        """
-        # :red[S.A.R.A] &nbsp;&nbsp;:brain: :calendar: :zap:
-        #### :blue[No more fretting over upcoming Audits or Course Exams]
-        #### :blue[Stay up to date with new revised Standard Operating Procedure]
-        """
+
+
+def generate_test_questions(question_quantity, pdf_text):
+    OpenAI_Key = st.secrets["OpenAI_Key"]
+    client = OpenAI(api_key=OpenAI_Key)
+
+    message_text = [
+        {"role": "system", "content": "You are an expert Quiz Maker who makes thoughtful and fun quizzes. You never give the same type of questions twice and always return them in neat formatted style. Understand this text and generate for me questions, 4 possible answers to each question first. Then return each question's correct answer index(1 to 4 as there are 4 options) and the reason why its correct. I want the Question, Choices and then Correct Answer Index and Reasons to be in this format: Question1 -(each option to have a checkbox for user to tick and be in numbered bulletised format) Choice1 Choice2  Choice3  Choice4. once questions are finished generating, then start with the answers. Answers - 1: A Reason: <its reason>, 2: B Reason: <its reason>, 3: D Reason: <its reason> and so on.  Do not give me any other information other than this. STRICTLY follow this template I have specified(list out all the questions first, then their answers in the specified format). i dont want any filler words. DONT MESS THIS UP VERY IMPORTANT!!"},
+        {"role": "user", "content": "generate these many questions: " + question_quantity + " using this information: " + pdf_text}
+    ]
+
+    completion = client.chat.completions.create(
+        model="gpt-4o",
+        messages=message_text,
+        temperature=0.9,
+        max_tokens=1000,
+        top_p=0.5,
+        frequency_penalty=0,
+        presence_penalty=0,
+        stop=None
     )
-    st.divider()
 
-    uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
+    filtered_message = completion.choices[0].message.content
 
-    if uploaded_file is not None:
+    if not filtered_message:
+        st.error("Failed to generate questions.")
+    else:
+        st.success("Questions generated successfully.")
+    
+    generate_docx(filtered_message)
+
+def generate_docx(text):
+    doc = Document()
+    doc.add_paragraph(text)
+
+    # Save the docx file in a BytesIO object
+    file_stream = io.BytesIO()
+    doc.save(file_stream)
+    file_stream.seek(0)
+
+    # Generate download button
+    st.download_button(
+        label="Download .docx",
+        data=file_stream,
+        file_name="output.docx",
+        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
+    
+
+
+st.header("SARA AI  &nbsp;&nbsp;:brain: :calendar: :zap:")
+
+st.text("No more fretting over upcoming Audits or Course Exams")
+st.text("Stay up to date with new revised Standard Operating Procedure")
+
+ui.badges(badge_list=[("Lifesaver Labs", "secondary"), ("Sentosa Fire Station", "destructive")], class_name="flex gap-2", key="badges1")
+
+uploaded_file = st.file_uploader("", type=["pdf", "docx"])
+
+st.divider()
+
+# Create the tabs with two options: 'Page 1' and 'Page 2'
+selected_tab = ui.tabs(options=["Training Dojo", "Test Mode"], default_value='Training Dojo', key="main_tabs")
+
+
+if uploaded_file is not None:
+    if selected_tab == 'Training Dojo':
         # Read text from uploaded PDF file
         pdf_text = read_pdf(uploaded_file)
         # Pass the extracted text to the get_chat_response function
@@ -120,10 +182,31 @@ def main():
                 answer_options[i],
                 correct_answer_index[i] + 1,
                 success=OpenAI_Filtering_Check(check_answer(correct_answer_index[i] + 1)),
-                error='''Wrong Answer :) \n Please try again''',
+                error='''Wrong Answer 😒 \n Please try again''',
                 button="Check answer"
             )
 
-if __name__ == "__main__":
-    main()
-    
+
+    elif selected_tab == 'Test Mode':
+
+        question_quantity = st.text_input("**Enter number of questions:**",placeholder="50", key="question_quantity")
+
+        generate_button_clicked = st.button("Generate", key="generate_button")
+        
+        # Logic to handle button click and check input value
+        if generate_button_clicked:
+            # Check if the input value is not empty
+            if question_quantity and question_quantity.strip() != "":
+                st.write(f"Number of questions to generate: {question_quantity}")
+                pdf_text = read_pdf(uploaded_file)
+                generate_test_questions(question_quantity, pdf_text)
+
+            else:
+                st.write("Please enter a valid number.")
+
+
+
+
+
+
+
