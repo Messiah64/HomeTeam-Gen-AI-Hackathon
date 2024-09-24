@@ -147,7 +147,7 @@ def generate_docx(text):
 
 st.header("S.A.R.A AI  &nbsp;&nbsp;:brain: :calendar: :zap:")
 
-st.text("Structured Assesment & Review Aid")
+st.text("**Structured Assesment & Review Aid**")
 st.text("No more fretting over upcoming Audits or Course Exams")
 st.text("Stay up to date with new revised Standard Operating Procedure")
 
