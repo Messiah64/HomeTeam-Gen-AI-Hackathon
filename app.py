@@ -197,9 +197,12 @@ if uploaded_file is not None:
         if generate_button_clicked:
             # Check if the input value is not empty
             if question_quantity and question_quantity.strip() != "":
-                st.write(f"Number of questions to generate: {question_quantity}")
-                pdf_text = read_pdf(uploaded_file)
-                generate_test_questions(question_quantity, pdf_text)
+                if question_quantity > 0 and question_quantity < 10:
+                    st.write(f"Number of questions to generate: {question_quantity}")
+                    pdf_text = read_pdf(uploaded_file)
+                    generate_test_questions(question_quantity, pdf_text)
+                else:
+                    st.error("Please enter lesser questions to generate :sob:")
 
             else:
                 st.write("Please enter a valid number.")
