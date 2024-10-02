@@ -123,7 +123,7 @@ def generate_test_questions(question_quantity, pdf_text):
         st.error("Failed to generate questions.")
     else:
         st.success("Questions generated successfully.")
-    
+
     generate_docx(filtered_message)
 
 def generate_docx(text):
@@ -142,9 +142,11 @@ def generate_docx(text):
         file_name="output.docx",
         mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     )
-    
 
 
+
+st.header("S.A.R.A   &nbsp;&nbsp;:brain: :calendar: :zap:")
+st.text(" &nbsp;&nbsp;")
 st.title("S.A.R.A   &nbsp;&nbsp;:brain: :calendar: :zap:")
 st.text("Structured Assesment & Review Aid")
 st.text("No more fretting over upcoming Audits or Course Exams")
@@ -192,24 +194,14 @@ if uploaded_file is not None:
         question_quantity = st.text_input("**Enter number of questions:**",placeholder="50", key="question_quantity")
 
         generate_button_clicked = st.button("Generate", key="generate_button")
-        
+
         # Logic to handle button click and check input value
         if generate_button_clicked:
             # Check if the input value is not empty
             if question_quantity and question_quantity.strip() != "":
-                if question_quantity > 0 and question_quantity < 10:
-                    st.write(f"Number of questions to generate: {question_quantity}")
-                    pdf_text = read_pdf(uploaded_file)
-                    generate_test_questions(question_quantity, pdf_text)
-                else:
-                    st.error("Please enter lesser questions to generate :sob:")
+                st.write(f"Number of questions to generate: {question_quantity}")
+                pdf_text = read_pdf(uploaded_file)
+                generate_test_questions(question_quantity, pdf_text)
 
             else:
                 st.write("Please enter a valid number.")
-
-
-
-
-
-
-
