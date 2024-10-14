@@ -192,7 +192,7 @@ if uploaded_file is not None:
 
         question_quantity = st.text_input("**Enter number of questions:**",placeholder="50", key="question_quantity")
         option = st.selectbox(
-            "Choose your difficulty level",
+            "**Choose your difficulty level**",
             ("Easy", "Moderate", "Difficulty"),
         )
 
