@@ -97,12 +97,12 @@ def parse_questions_text(text):
 
 
 
-def generate_test_questions(question_quantity, pdf_text):
+def generate_test_questions(question_quantity, pdf_text, option):
     OpenAI_Key = st.secrets["OpenAI_Key"]
     client = OpenAI(api_key=OpenAI_Key)
 
     message_text = [
-        {"role": "system", "content": "You are an expert Quiz Maker who makes thoughtful and fun quizzes. You never give the same type of questions twice and always return them in neat formatted style. Understand this text and generate for me questions, 4 possible answers to each question first. Then return each question's correct answer index(1 to 4 as there are 4 options) and the reason why its correct. I want the Question, Choices and then Correct Answer Index and Reasons to be in this format: Question1 -(each option to have a checkbox for user to tick and be in numbered bulletised format) Choice1 Choice2  Choice3  Choice4. once questions are finished generating, then start with the answers. Answers - 1: A Reason: <its reason>, 2: B Reason: <its reason>, 3: D Reason: <its reason> and so on.  Do not give me any other information other than this. STRICTLY follow this template I have specified(list out all the questions first, then their answers in the specified format). i dont want any filler words. DONT MESS THIS UP VERY IMPORTANT!!"},
+        {"role": "system", "content": f"You are an expert Quiz Maker who makes thoughtful and fun quizzes. You never give the same type of questions twice and always return them in neat formatted style. Understand this text and generate for me {option} questions, 4 possible answers to each question first. Then return each question's correct answer index(1 to 4 as there are 4 options) and the reason why its correct. I want the Question, Choices and then Correct Answer Index and Reasons to be in this format: Question1 -(each option to have a checkbox for user to tick and be in numbered bulletised format) Choice1 Choice2  Choice3  Choice4. once questions are finished generating, then start with the answers. Answers - 1: A Reason: <its reason>, 2: B Reason: <its reason>, 3: D Reason: <its reason> and so on.  Do not give me any other information other than this. STRICTLY follow this template I have specified(list out all the questions first, then their answers in the specified format). i dont want any filler words. DONT MESS THIS UP VERY IMPORTANT!!"},
         {"role": "user", "content": "generate these many questions: " + question_quantity + " using this information: " + pdf_text}
     ]
 
@@ -191,7 +191,12 @@ if uploaded_file is not None:
     elif selected_tab == 'Test Mode':
 
         question_quantity = st.text_input("**Enter number of questions:**",placeholder="50", key="question_quantity")
+        option = st.selectbox(
+            "Choose your difficulty level",
+            ("Easy", "Moderate", "Difficulty"),
+        )
 
+        st.write("You selected:", option)
         generate_button_clicked = st.button("Generate", key="generate_button")
 
         # Logic to handle button click and check input value
@@ -200,7 +205,8 @@ if uploaded_file is not None:
             if question_quantity and question_quantity.strip() != "":
                 st.write(f"Number of questions to generate: {question_quantity}")
                 pdf_text = read_pdf(uploaded_file)
-                generate_test_questions(question_quantity, pdf_text)
+                generate_test_questions(question_quantity, pdf_text, option)
+
 
             else:
                 st.write("Please enter a valid number.")
