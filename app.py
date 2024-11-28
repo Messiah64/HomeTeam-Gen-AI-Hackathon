@@ -158,7 +158,7 @@ uploaded_file = st.file_uploader("", type=["pdf", "docx"])
 st.divider()
 
 # Create the tabs with two options: 'Page 1' and 'Page 2'
-selected_tab = ui.tabs(options=["Training Dojo", "Test Mode"], default_value='Training Dojo', key="main_tabs")
+selected_tab = ui.tabs(options=["EMT Training Dojo", "PSCT Training Dojo", "EMT Test Mode"], default_value='EMT Training Dojo', key="main_tabs")
 
 
 if uploaded_file is not None:
