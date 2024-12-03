@@ -183,10 +183,10 @@ def generate_docx(text):
 
 st.title("S.A.R.A   &nbsp;&nbsp;:brain: :calendar: :zap:")
 st.text("Structured Assesment & Review Aid")
-st.text("No more fretting over upcoming Audits or Course Exams")
-st.text("Stay up to date with new revised Standard Operating Procedure")
+#st.text("No more fretting over upcoming Audits or Course Exams")
+#st.text("Stay up to date with new revised Standard Operating Procedure")
 
-ui.badges(badge_list=[("Lifesaver Labs", "secondary"), ("Sentosa Fire Station", "destructive")], class_name="flex gap-2", key="badges1")
+#ui.badges(badge_list=[("Lifesaver Labs", "secondary"), ("Sentosa Fire Station", "destructive")], class_name="flex gap-2", key="badges1")
 
 uploaded_file = st.file_uploader("Upload PDF or DOCX", type=["pdf", "docx", "pptx"], label_visibility="collapsed")
 
