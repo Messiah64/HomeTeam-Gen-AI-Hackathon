@@ -33,29 +33,8 @@ def get_chat_response(user_query):
     OpenAI_Key = st.secrets["OpenAI_Key"]
     client = OpenAI(api_key=OpenAI_Key)
 
-    message_text = [
-        {
-            "role": "system",
-            "content": (
-                "You are an expert Quiz Maker who makes thoughtful and fun quizzes. "
-                "You never give the same type of questions twice. Understand this text and "
-                "generate for 10 questions, 4 possible answers to each question, the correct "
-                "answer's index(0 to 3 as there are 4 options), and its reason for being correct "
-                "or wrong. Each reason for each of the choices, depending its correct or wrong. "
-                "I want the Question, Choices, Correct Answer Index and Reasons to be in this format: "
-                "Question1 | Choice1 | Choice2 | Choice3 | Choice4 | (example: 2 #For Choice 3 | "
-                "(reason for option A being correct/or wrong if not the right answer) | "
-                "(reason for option B being correct/or wrong if not the right answer) | "
-                "(reason for option C being correct/or wrong if not the right answer) | "
-                "(reason for option D being correct/or wrong if not the right answer). "
-                "An Example if option C is the right answer: "
-                "Question1 - What is the colour of healthy grass | Red | Yellow | Blue | Green | 3 | "
-                "Healthy grass isn't Red colour | Grass is only yellow if its diseased | "
-                "Its impossible for grass to be blue in colour | Yes! Grass is indeed Green in colour |. "
-                "Do not give me any other information other than this. STRICTLY follow this template "
-                "I have specified. I dont want any filler words. DONT MESS THIS UP VERY IMPORTANT!!"
-            )
-        },
+    message_text = [ 
+        
         {
             "role": "user",
             "content": (
@@ -275,8 +254,8 @@ def generate_psct_test_questions(question_quantity, pdf_text, option):
 
     message_text = [
         {
-            "role": "system",
-            "content": (
+            "role": "user",
+            "content": 
                 f"You are an expert Quiz Maker who makes thoughtful and fun quizzes. You never give the same "
                 f"type of questions twice and always return them in neat formatted style. Understand this text "
                 f"and generate for me {option} questions, 4 possible answers to each question first. Then "
@@ -288,12 +267,7 @@ def generate_psct_test_questions(question_quantity, pdf_text, option):
                 f"<its reason>, 3: D Reason: <its reason> and so on. Do not give me any other information other "
                 f"than this. STRICTLY follow this template I have specified(list out all the questions first, then "
                 f"their answers in the specified format). i dont want any filler words. DONT MESS THIS UP VERY "
-                f"IMPORTANT!!"
-            )
-        },
-        {
-            "role": "user",
-            "content": "generate these many questions: " + question_quantity + " using this information: " + pdf_text
+                f"IMPORTANT!!""generate these many questions: " + question_quantity + " using this information: " + pdf_text
         }
     ]
 
