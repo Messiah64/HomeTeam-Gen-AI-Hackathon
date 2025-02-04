@@ -182,12 +182,11 @@ def generate_docx(text):
 
 st.markdown("""
     <style>
-        #MainMenu {
-  visibility: hidden;
-}
-
+        /* Completely hide the MainMenu */
+        #MainMenu { display: none; }
     </style>
 """, unsafe_allow_html=True)
+
 
 st.title("S.A.R.A   &nbsp;&nbsp;:brain: :calendar: :zap:")
 st.text("Structured Assesment & Review Aid")
