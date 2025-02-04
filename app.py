@@ -180,6 +180,15 @@ def generate_docx(text):
     )
 
 
+st.markdown("""
+    <style>
+        /* Hide the hamburger menu and all top-right icons */
+        .css-1p9kaay {display: none;}  /* All top-right icons */
+        .css-1e4b17f {display: none;}  /* The streamlit logo */
+        .css-10trblm {display: none;}  /* The share button */
+        .css-12w0n6j {display: none;}  /* The star button */
+    </style>
+""", unsafe_allow_html=True)
 
 st.title("S.A.R.A   &nbsp;&nbsp;:brain: :calendar: :zap:")
 st.text("Structured Assesment & Review Aid")
