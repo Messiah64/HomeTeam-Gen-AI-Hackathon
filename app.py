@@ -56,7 +56,8 @@ def get_chat_response(user_query):
                 "Do not give me any other information other than this. STRICTLY follow this template "+
                 "I have specified. I dont want any filler words. DONT MESS THIS UP VERY IMPORTANT!! "+
                 "Use full content of my SOP book: "+
-                "{user_query}"
+                "{user_query}"+
+                " I told you to strictly follow my template. Why are you not following it? "+
             )
         }
     ]
