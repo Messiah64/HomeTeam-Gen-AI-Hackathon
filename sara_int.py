@@ -35,7 +35,7 @@ def get_chat_response(user_query):
     ]
 
     completion = client.chat.completions.create(
-        model="o1-mini",
+        model="o3-mini-2025-1-31",
         messages=message_text, 
     )
 
@@ -125,7 +125,7 @@ def generate_test_questions(question_quantity, pdf_text, option):
         {"role": "user", "content": f"You are an expert Quiz Maker who makes thoughtful and fun quizzes. You never give the same type of questions twice and always return them in neat formatted style. Understand this text and generate for me {question_quantity} {option} questions, 4 possible answers to each question first. Then return each question's correct answer index(1 to 4 as there are 4 options) and the reason why its correct. I want the Question, Choices and then Correct Answer Index and Reasons to be in this format: Question1 -(each option to have a checkbox for user to tick and be in numbered bulletised format) Choice1 Choice2  Choice3  Choice4. once questions are finished generating, then start with the answers. Answers - 1: A Reason: <its reason>, 2: B Reason: <its reason>, 3: D Reason: <its reason> and so on.  Do not give me any other information other than this. STRICTLY follow this template I have specified(list out all the questions first, then their answers in the specified format). i dont want any filler words. DONT MESS THIS UP VERY IMPORTANT!!{pdf_text}" },    ]
 
     completion = client.chat.completions.create(
-        model="o1-mini",
+        model="o3-mini-2025-1-31",
         messages=message_text,
     )
 
