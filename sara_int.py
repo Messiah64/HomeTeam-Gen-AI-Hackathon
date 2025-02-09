@@ -30,7 +30,6 @@ def get_chat_response(user_query):
     client = OpenAI(api_key=OpenAI_Key)
 
     message_text = [
-        #{"role": "system", "content": "You are an expert Quiz Maker who makes thoughtful and fun quizzes. You never give the same type of questions twice. Understand this text and generate for 10 questions, 4 possible answers to each question, the correct answer's index( 0 to 3 as there are 4 options), and its reason for being correct or wrong. Each reason for each of the choices, depending its correct or wrong. I want the Question, Choices, Correct Answer Index and Reasons to be in this format: Question1 | Choice1 | Choice2 | Choice3 | Choice4 | (example: 2 #For Choice 3 | (reason for option A being correct/or wrong if not the right answer) | (reason for option B being correct/or wrong if not the right answer) | (reason for option C being correct/or wrong if not the right answer) | (reason for option D being correct/or wrong if not the right answer),   An Example if option C is the right answer: Question1 - What is the colour of healthy grass | Red | Yellow | Blue | Green | 3 | Healthy grass isn't Red colour | Grass is only yellow if its diseased | Its impossible for grass to be blue in colour | Yes! Grass is indeed Green in colour |. Do not give me any other information other than this. STRICTLY follow this template I have specified. i dont want any filler words. DONT MESS THIS UP VERY IMPORTANT!!"},
         {"role": "user", "content": f"You are an expert Quiz Maker who makes thoughtful and fun quizzes. You never give the same type of questions twice. Understand this text and generate for 15 questions, 4 possible answers to each question, the correct answer's index( 0 to 3 as there are 4 options), and its reason for being correct or wrong. Each reason for each of the choices, depending its correct or wrong. I want the Question, Choices, Correct Answer Index and Reasons to be in this format: Question1 | Choice1 | Choice2 | Choice3 | Choice4 | (example: 2 #For Choice 3 | (reason for option A being correct/or wrong if not the right answer) | (reason for option B being correct/or wrong if not the right answer) | (reason for option C being correct/or wrong if not the right answer) | (reason for option D being correct/or wrong if not the right answer),   An Example if option C is the right answer: Question1 - What is the colour of healthy grass | Red | Yellow | Blue | Green | 3 | Healthy grass isn't Red colour | Grass is only yellow if its diseased | Its impossible for grass to be blue in colour | Yes! Grass is indeed Green in colour |. Do not give me any other information other than this. STRICTLY follow this template I have specified. i dont want any filler words. DONT MESS THIS UP VERY IMPORTANT!! Use full content of my SOP book: {user_query} . Remember to use full content of my SOP book" }
     ]
 
@@ -121,8 +120,8 @@ def generate_test_questions(question_quantity, pdf_text, option):
     client = OpenAI(api_key=OpenAI_Key)
 
     message_text = [
-        #{"role": "system", "content": "You are an expert Quiz Maker who makes thoughtful and fun quizzes. You never give the same type of questions twice. Understand this text and generate for 10 questions, 4 possible answers to each question, the correct answer's index( 0 to 3 as there are 4 options), and its reason for being correct or wrong. Each reason for each of the choices, depending its correct or wrong. I want the Question, Choices, Correct Answer Index and Reasons to be in this format: Question1 | Choice1 | Choice2 | Choice3 | Choice4 | (example: 2 #For Choice 3 | (reason for option A being correct/or wrong if not the right answer) | (reason for option B being correct/or wrong if not the right answer) | (reason for option C being correct/or wrong if not the right answer) | (reason for option D being correct/or wrong if not the right answer),   An Example if option C is the right answer: Question1 - What is the colour of healthy grass | Red | Yellow | Blue | Green | 3 | Healthy grass isn't Red colour | Grass is only yellow if its diseased | Its impossible for grass to be blue in colour | Yes! Grass is indeed Green in colour |. Do not give me any other information other than this. STRICTLY follow this template I have specified. i dont want any filler words. DONT MESS THIS UP VERY IMPORTANT!!"},
-        {"role": "user", "content": f"You are an expert Quiz Maker who makes thoughtful and fun quizzes. You never give the same type of questions twice and always return them in neat formatted style. Understand this text and generate for me {question_quantity} {option} questions, 4 possible answers to each question first. Then return each question's correct answer index(1 to 4 as there are 4 options) and the reason why its correct. I want the Question, Choices and then Correct Answer Index and Reasons to be in this format: Question1 -(each option to have a checkbox for user to tick and be in numbered bulletised format) Choice1 Choice2  Choice3  Choice4. once questions are finished generating, then start with the answers. Answers - 1: A Reason: <its reason>, 2: B Reason: <its reason>, 3: D Reason: <its reason> and so on.  Do not give me any other information other than this. STRICTLY follow this template I have specified(list out all the questions first, then their answers in the specified format). i dont want any filler words. DONT MESS THIS UP VERY IMPORTANT!!{pdf_text}" },    ]
+        {"role": "user", "content": f"You are an expert Quiz Maker who makes thoughtful and fun quizzes. You never give the same type of questions twice and always return them in neat formatted style. Understand this text and generate for me {question_quantity} {option} questions, 4 possible answers to each question first. Then return each question's correct answer index(1 to 4 as there are 4 options) and the reason why its correct. I want the Question, Choices and then Correct Answer Index and Reasons to be in this format: Question1 -(each option to have a checkbox for user to tick and be in numbered bulletised format) Choice1 Choice2  Choice3  Choice4. once questions are finished generating, then start with the answers. Answers - 1: A Reason: <its reason>, 2: B Reason: <its reason>, 3: D Reason: <its reason> and so on.  Do not give me any other information other than this. STRICTLY follow this template I have specified(list out all the questions first, then their answers in the specified format). i dont want any filler words. DONT MESS THIS UP VERY IMPORTANT!!{pdf_text}" },
+    ]
 
     completion = client.chat.completions.create(
         model="o1-mini",
@@ -144,8 +143,8 @@ def generate_psct_test_questions(question_quantity, pdf_text, option):
     client = OpenAI(api_key=OpenAI_Key)
 
     message_text = [
-        #{"role": "system", "content": "You are an expert Quiz Maker who makes thoughtful and fun quizzes. You never give the same type of questions twice. Understand this text and generate for 10 questions, 4 possible answers to each question, the correct answer's index( 0 to 3 as there are 4 options), and its reason for being correct or wrong. Each reason for each of the choices, depending its correct or wrong. I want the Question, Choices, Correct Answer Index and Reasons to be in this format: Question1 | Choice1 | Choice2 | Choice3 | Choice4 | (example: 2 #For Choice 3 | (reason for option A being correct/or wrong if not the right answer) | (reason for option B being correct/or wrong if not the right answer) | (reason for option C being correct/or wrong if not the right answer) | (reason for option D being correct/or wrong if not the right answer),   An Example if option C is the right answer: Question1 - What is the colour of healthy grass | Red | Yellow | Blue | Green | 3 | Healthy grass isn't Red colour | Grass is only yellow if its diseased | Its impossible for grass to be blue in colour | Yes! Grass is indeed Green in colour |. Do not give me any other information other than this. STRICTLY follow this template I have specified. i dont want any filler words. DONT MESS THIS UP VERY IMPORTANT!!"},
-        {"role": "user", "content": f"You are an expert Quiz Maker who makes ELABORATE quizes. You never give the same type of questions twice and always return them in neat formatted style. Understand this text(questions, the correct answer and their wrong answers) and generate for me {question_quantity} {option} questions IN THE SAME WAY THE QUESTIONS WERE ASKED, 4 possible answers to each question first. Then return each question's correct answer index(1 to 4 as there are 4 options) and the reason why its correct. I want the Question, Choices and then Correct Answer Index and Reasons to be in this format: Question1 -(each option to have a checkbox for user to tick and be in numbered bulletised format) Choice1 Choice2  Choice3  Choice4. once questions are finished generating, then start with the answers. Answers - 1: A Reason: <its reason>, 2: B Reason: <its reason>, 3: D Reason: <its reason> and so on.  Do not give me any other information other than this. STRICTLY follow this template I have specified(list out all the questions first, then their answers in the specified format). i dont want any filler words. DONT MESS THIS UP VERY IMPORTANT!!{pdf_text}" },    ]
+        {"role": "user", "content": f"You are an expert Quiz Maker who makes ELABORATE quizes. You never give the same type of questions twice and always return them in neat formatted style. Understand this text(questions, the correct answer and their wrong answers) and generate for me {question_quantity} {option} questions IN THE SAME WAY THE QUESTIONS WERE ASKED, 4 possible answers to each question first. Then return each question's correct answer index(1 to 4 as there are 4 options) and the reason why its correct. I want the Question, Choices and then Correct Answer Index and Reasons to be in this format: Question1 -(each option to have a checkbox for user to tick and be in numbered bulletised format) Choice1 Choice2  Choice3  Choice4. once questions are finished generating, then start with the answers. Answers - 1: A Reason: <its reason>, 2: B Reason: <its reason>, 3: D Reason: <its reason> and so on.  Do not give me any other information other than this. STRICTLY follow this template I have specified(list out all the questions first, then their answers in the specified format). i dont want any filler words. DONT MESS THIS UP VERY IMPORTANT!!{pdf_text}" },
+    ]
 
     completion = client.chat.completions.create(
         model="o1-preview",
@@ -192,11 +191,8 @@ st.title("S.A.R.A   &nbsp;&nbsp;:brain: :calendar: :zap:")
 st.text("Structured Assesment & Review Aid")
 st.text("No more fretting over upcoming Audits or Course Exams")
 st.text("Stay up to date with new revised Standard Operating Procedure")
-#st.text("No more fretting over upcoming Audits or Course Exams")
-#st.text("Stay up to date with new revised Standard Operating Procedure")
 
 ui.badges(badge_list=[("Sentosa Fire Station", "destructive"), ("Life Saver Labs", "secondary")], class_name="flex gap-2", key="badges1")
-#ui.badges(badge_list=[("Lifesaver Labs", "secondary"), ("Sentosa Fire Station", "destructive")], class_name="flex gap-2", key="badges1")
 
 uploaded_file = st.file_uploader("Upload PDF or DOCX", type=["pdf", "docx", "pptx"], label_visibility="collapsed")
 
@@ -210,7 +206,14 @@ if uploaded_file is not None:
     response_message = get_chat_response(pdf_text)
     print(response_message)
 
-    questions, answer_options, correct_answer_index, reasons = parse_questions_text(response_message)
+    # Filter: Keep calling API until the questions text parses successfully.
+    while True:
+        try:
+            questions, answer_options, correct_answer_index, reasons = parse_questions_text(response_message)
+            break  # exit loop if parse is successful
+        except ValueError as e:
+            print("Parsing failed, retrying API call:", e)
+            response_message = get_chat_response(pdf_text)
 
     for i in range(len(questions)):
         def check_answer(selected_option):
@@ -227,4 +230,3 @@ if uploaded_file is not None:
             error='''Wrong Answer 😒 \n Please try again''',
             button="Check answer"
         )
-
