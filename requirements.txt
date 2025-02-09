@@ -83,7 +83,7 @@ streamlit-keyup==0.2.4
 streamlit-option-menu==0.3.12
 streamlit-shadcn-ui==0.1.18
 streamlit-toggle-switch==1.0.2
-streamlit-book==0.4.0
+streamlit-book==0.7.6
 streamlit-vertical-slider==2.5.5
 tenacity==8.5.0
 tinycss2==1.3.0
