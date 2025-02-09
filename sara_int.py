@@ -35,7 +35,7 @@ def get_chat_response(user_query):
     ]
 
     completion = client.chat.completions.create(
-        model="o3-mini-2025-1-31",
+        model="o1-mini",
         messages=message_text, 
     )
 
