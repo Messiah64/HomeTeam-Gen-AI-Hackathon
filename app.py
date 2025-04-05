@@ -57,9 +57,9 @@ def get_psct_chat_response(user_query):
     ]
 
     completion = client.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-4",
         messages=message_text,
-        temperature=0.2,
+        temperature=0.4,
         top_p=0.5,
         frequency_penalty=0,
         presence_penalty=0,
